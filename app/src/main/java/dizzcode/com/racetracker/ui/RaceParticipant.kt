@@ -1,9 +1,12 @@
 package dizzcode.com.racetracker.ui
 
+import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.delay
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * This class represents a state holder for race participant.
@@ -15,6 +18,7 @@ class RaceParticipant(
     private val progressIncrement: Int = 1,
     private val initialProgress: Int = 0
 ) {
+
     init {
         require(maxProgress > 0) { "maxProgress=$maxProgress; must be > 0" }
         require(progressIncrement > 0) { "progressIncrement=$progressIncrement; must be > 0" }
@@ -31,9 +35,14 @@ class RaceParticipant(
      * [maxProgress]. There is a delay of [progressDelayMillis] between each update.
      */
     suspend fun run() {
-        while (currentProgress < maxProgress) {
-            delay(progressDelayMillis)
-            currentProgress += progressIncrement
+        try {
+            while (currentProgress < maxProgress) {
+                delay(progressDelayMillis)
+                currentProgress += progressIncrement
+            }
+        } catch (e: CancellationException) {
+            Log.e("RaceParticipant", "$name: ${e.message}")
+            throw e // Always re-throw CancellationException.
         }
     }
 
