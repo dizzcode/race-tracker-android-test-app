@@ -62,6 +62,7 @@ fun RaceTrackerApp() {
                 launch { playerTwo.run() }
             }
             raceInProgress = false
+            // This will update the state immediately, without waiting for players to finish run() execution.
         }
     }
     RaceTrackerScreen(
