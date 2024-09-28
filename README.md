@@ -4,7 +4,6 @@
 
 - Coroutines in Android Studio
 - Structured concurrency
-- 
 
 ##
 ### View
